@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn import linear_model
 
 
 boston_csv = "https://raw.githubusercontent.com/selva86/datasets/master/BostonHousing.csv"
@@ -47,9 +48,28 @@ y = y.reshape(-1, 1)
 
 #Valor médio vs n de quarto
 #Criando gráfico de dispersão
-plt.scatter(X_rooms, y)
+#plt.scatter(X_rooms, y)
 #Definindo as legendas dos eixos x e y do gráfico
-plt.ylabel('Valor da casa /1000 ($)')
-plt.xlabel('Número de quartos')
+#plt.ylabel('Valor da casa /1000 ($)')
+#plt.xlabel('Número de quartos')
 #Mostrar o gráfico
+#plt.show()
+
+#Instanciando a classe do linear regression
+reg = linear_model.LinearRegression()
+#Colocando os dados no modelo
+reg.fit(X_rooms, y)
+#Criando meu espaço linear, que nada mais é do que a média entretodos aqueles pontos para
+#criar uma linha que vai meio que generalizar esse valores, e o reshape serve
+#para transformar a visualização da lista para uma coluna, o 1 faz esse conversão.
+prediction_space = np.linspace(min(X_rooms), max(X_rooms)).reshape(-1, 1)
+
+#Criando o gráfico de dispersão, sendo a bolinhas dar cor azul
+plt.scatter(X_rooms, y, color='blue')
+#Colocando a linha no meio do gráfico, basicamente, estamos definindo como x
+#o espaço de previsão, que nada mais é do que uma coluna com todos os
+#números que formam a linha e o y é a previsão de y baseado em x, sendo reg
+#o método para criar a regressão linear 
+plt.plot(prediction_space, reg.predict(prediction_space), color='black', linewidth=3)
 plt.show()
+
